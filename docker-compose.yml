@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  database_template:
+    image: postgres
+    container_name: database_template
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=template
+      - POSTGRES_PASSWORD=template
+      - POSTGRES_DB=template_db
+    volumes:
+      - pgdata:/data/postgres
+  app:
+    build: .
+    container_name: template
+    ports: 
+      - 3333:3333
+    volumes:
+      - .:/usr/app
+    links:
+      - database_template
+    depends_on: 
+      - database_template
+
+volumes:
+  pgdata:
+    driver: local
